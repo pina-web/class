@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#FAFBFC">
+<title>클래스노트</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+:root{
+  --bg:#FAFBFC; --card:#FFF; --line:#E6EBF0;
+  --blue:#8FC7E8; --green:#A8D5A2;
+  --navy:#2C3E50; --text:#33383D; --sub:#8A939C; --faint:#B8C0C8;
+  --amber:#E8C88F; --rose:#E8A0A0;
+  --r:14px; --shadow:0 1px 3px rgba(44,62,80,.05),0 4px 16px rgba(44,62,80,.04);
+}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;padding-bottom:calc(84px + env(safe-area-inset-bottom));}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px;}
+header{padding:26px 0 16px;}
+h1{font-size:24px;font-weight:800;letter-spacing:-.6px;color:var(--navy);}
+.hsub{font-size:13px;color:var(--sub);margin-top:4px;font-weight:500;}
+.bar{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--green));margin-top:14px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);}
+.page{display:none;} .page.on{display:block;}
+.sec-t{font-size:13px;font-weight:700;color:var(--sub);margin:20px 0 10px;letter-spacing:-.2px;}
+.btn{border:none;border-radius:10px;padding:11px 16px;font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s;}
+.btn:active{transform:scale(.97);}
+.b-p{background:var(--navy);color:#fff;} .b-s{background:#F1F4F7;color:var(--text);}
+.b-b{background:var(--blue);color:#fff;} .b-g{background:var(--green);color:#fff;}
+.b-d{background:#FDF0F0;color:#C96A6A;}
+.row{display:flex;gap:8px;} .row>*{flex:1;}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;font-family:inherit;background:#fff;color:var(--text);}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--blue);outline-offset:-1px;border-color:transparent;}
+label{display:block;font-size:12px;font-weight:700;color:var(--sub);margin:12px 0 5px;}
+textarea{resize:vertical;min-height:70px;}
+.empty{text-align:center;padding:52px 20px;color:var(--faint);font-size:13.5px;line-height:1.7;}
+.empty b{display:block;color:var(--sub);font-size:14.5px;margin-bottom:5px;font-weight:700;}
+
+/* nav */
+nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:50;}
+nav button{flex:1;background:none;border:none;padding:11px 0 12px;font-family:inherit;font-size:10.5px;font-weight:700;color:var(--faint);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;}
+nav button.on{color:var(--navy);} nav svg{width:21px;height:21px;stroke-width:1.8;}
+.badge-n{position:absolute;top:6px;margin-left:26px;background:var(--rose);color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:8px;}
+
+/* today */
+.datenav{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.datenav button{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:#fff;font-size:15px;cursor:pointer;color:var(--sub);}
+.datenav .dlabel{flex:1;text-align:center;font-size:16px;font-weight:800;color:var(--navy);}
+.datenav .dlabel small{display:block;font-size:11px;color:var(--sub);font-weight:600;margin-top:1px;}
+.ses{padding:14px 15px;margin-bottom:10px;}
+.ses-h{display:flex;align-items:center;gap:9px;}
+.ses-t{font-size:15px;font-weight:800;color:var(--navy);}
+.ses-time{font-size:12px;color:var(--sub);font-weight:600;}
+.chip{font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:7px;}
+.c-mk{background:#FBF4E6;color:#A9862F;} .c-off{background:#FDF0F0;color:#C96A6A;}
+.c-ok{background:#EDF6EE;color:#5E8F5C;}
+.stu{display:flex;align-items:center;gap:8px;padding:9px 0;border-top:1px solid #F2F5F8;}
+.stu-n{flex:1;font-size:14px;font-weight:600;}
+.stu-n small{color:var(--faint);font-weight:500;font-size:11.5px;margin-left:5px;}
+.att{display:flex;gap:4px;}
+.att button{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:11px;font-weight:800;color:var(--faint);cursor:pointer;}
+.att button.on-p{background:var(--green);border-color:var(--green);color:#fff;}
+.att button.on-a{background:var(--rose);border-color:var(--rose);color:#fff;}
+.att button.on-l{background:var(--amber);border-color:var(--amber);color:#fff;}
+.off-note{padding:11px 12px;background:#FDF7F7;border-radius:9px;font-size:12.5px;color:#B07070;margin-top:10px;line-height:1.6;}
+
+/* grid */
+.gwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table.grid{border-collapse:collapse;width:100%;min-width:640px;background:#fff;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);}
+.grid th{background:var(--navy);color:#fff;font-size:11.5px;font-weight:700;padding:9px 6px;}
+.grid td{border:1px solid var(--line);padding:5px;vertical-align:top;height:56px;}
+.grid td.tcol{background:#F7F9FB;font-size:11px;font-weight:700;color:var(--sub);text-align:center;width:66px;vertical-align:middle;}
+.gcell{background:#EFF7FC;border-left:3px solid var(--blue);border-radius:6px;padding:5px 6px;font-size:11px;font-weight:700;color:var(--navy);cursor:pointer;line-height:1.35;}
+.gcell small{display:block;color:var(--sub);font-weight:600;font-size:10px;}
+.gcell.mk{background:#FBF4E6;border-left-color:var(--amber);}
+.gadd{width:100%;height:100%;min-height:44px;border:1px dashed #E0E6EC;border-radius:6px;background:none;color:#D5DCE3;font-size:15px;cursor:pointer;}
+.gadd:hover{border-color:var(--blue);color:var(--blue);}
+
+/* students */
+.srch{margin-bottom:12px;}
+.stu-c{padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;gap:11px;cursor:pointer;}
+.av{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--green));color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;}
+.stu-i{flex:1;min-width:0;}
+.stu-i .n{font-size:14.5px;font-weight:700;color:var(--navy);}
+.stu-i .m{font-size:11.5px;color:var(--sub);margin-top:2px;font-weight:500;}
+.tick{text-align:right;flex-shrink:0;}
+.tick b{font-size:17px;font-weight:800;color:var(--navy);}
+.tick.low b{color:#C96A6A;} .tick span{font-size:10px;color:var(--faint);display:block;font-weight:700;}
+
+/* makeup */
+.mk-c{padding:13px 15px;margin-bottom:8px;}
+.mk-h{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.mk-h .n{font-size:14.5px;font-weight:800;color:var(--navy);flex:1;}
+.mk-m{font-size:12px;color:var(--sub);line-height:1.6;}
+.mk-b{display:flex;gap:6px;margin-top:10px;}
+.mk-b button{flex:1;padding:8px;font-size:12px;}
+
+/* stats */
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.kpi div{padding:14px 10px;text-align:center;}
+.kpi b{display:block;font-size:21px;font-weight:800;color:var(--navy);}
+.kpi span{font-size:10.5px;color:var(--sub);font-weight:700;margin-top:3px;display:block;}
+.brow{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid #F2F5F8;}
+.brow .bn{width:66px;font-size:12.5px;font-weight:700;flex-shrink:0;}
+.btrack{flex:1;height:7px;background:#F0F3F6;border-radius:4px;overflow:hidden;}
+.bfill{height:100%;border-radius:4px;background:var(--green);}
+.brow .bv{width:46px;text-align:right;font-size:11.5px;font-weight:700;color:var(--sub);}
+
+/* modal */
+.mask{position:fixed;inset:0;background:rgba(30,40,52,.4);backdrop-filter:blur(2px);z-index:100;display:none;align-items:flex-end;justify-content:center;}
+.mask.on{display:flex;}
+.modal{background:#fff;width:100%;max-width:520px;border-radius:18px 18px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-height:88vh;overflow-y:auto;animation:up .22s cubic-bezier(.2,.9,.3,1);}
+@keyframes up{from{transform:translateY(24px);opacity:.5}to{transform:none;opacity:1}}
+.m-t{font-size:17px;font-weight:800;color:var(--navy);margin-bottom:3px;}
+.m-s{font-size:12.5px;color:var(--sub);margin-bottom:14px;font-weight:500;}
+.days{display:flex;gap:5px;}
+.days button{flex:1;padding:9px 0;border:1px solid var(--line);background:#fff;border-radius:9px;font-size:12.5px;font-weight:700;color:var(--faint);cursor:pointer;font-family:inherit;}
+.days button.on{background:var(--blue);border-color:var(--blue);color:#fff;}
+.pick{max-height:190px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;padding:5px;}
+.pick label{display:flex;align-items:center;gap:9px;padding:8px 8px;margin:0;font-size:13.5px;font-weight:600;color:var(--text);cursor:pointer;border-radius:7px;}
+.pick label:hover{background:#F7F9FB;}
+.pick input{width:17px;height:17px;flex:none;accent-color:var(--blue);}
+.msg{background:#F7F9FB;border:1px solid var(--line);border-radius:10px;padding:13px;font-size:13px;line-height:1.75;white-space:pre-wrap;color:var(--text);}
+.tpl{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.tpl button{padding:7px 11px;border:1px solid var(--line);background:#fff;border-radius:20px;font-size:11.5px;font-weight:700;color:var(--sub);cursor:pointer;font-family:inherit;}
+.tpl button.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+.fab{position:fixed;right:18px;bottom:calc(84px + env(safe-area-inset-bottom));width:52px;height:52px;border-radius:16px;background:var(--navy);color:#fff;border:none;font-size:24px;box-shadow:0 6px 20px rgba(44,62,80,.24);cursor:pointer;z-index:40;}
+.toast{position:fixed;bottom:calc(100px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 18px;border-radius:11px;font-size:13px;font-weight:600;z-index:200;opacity:0;transition:.25s;pointer-events:none;}
+.toast.on{opacity:1;}
+@media(max-width:520px){.kpi b{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 id="ttl">오늘 수업</h1>
+    <p class="hsub" id="tsub">출결을 체크하면 보강 대기와 통계에 자동 반영됩니다</p>
+    <div class="bar"></div>
+  </header>
+
+  <!-- 오늘 -->
+  <section class="page on" id="p-today">
+    <div class="datenav">
+      <button onclick="mvDay(-1)">‹</button>
+      <div class="dlabel" id="dlab"></div>
+      <button onclick="mvDay(1)">›</button>
+    </div>
+    <div id="today-list"></div>
+  </section>
+
+  <!-- 시간표 -->
+  <section class="page" id="p-grid">
+    <div class="gwrap"><table class="grid" id="gridtb"></table></div>
+    <p class="sec-t">칸을 누르면 그룹을 만들거나 수정할 수 있습니다</p>
+  </section>
+
+  <!-- 학생 -->
+  <section class="page" id="p-stu">
+    <input class="srch" id="q" placeholder="이름 또는 그룹 검색" oninput="rStu()">
+    <div id="stu-list"></div>
+  </section>
+
+  <!-- 보강 -->
+  <section class="page" id="p-mk">
+    <div id="mk-list"></div>
+  </section>
+
+  <!-- 통계 -->
+  <section class="page" id="p-stat">
+    <div id="stat-body"></div>
+  </section>
+</div>
+
+<button class="fab" id="fab" onclick="fabAct()">＋</button>
+
+<nav>
+  <button class="on" data-p="today" onclick="go('today')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>오늘</button>
+  <button data-p="grid" onclick="go('grid')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M9 9v12M15 9v12"/></svg>시간표</button>
+  <button data-p="stu" onclick="go('stu')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M17 11.2a3 3 0 0 0 0-5.9M18.5 20a5.6 5.6 0 0 0-2.4-4.4"/></svg>학생</button>
+  <button data-p="mk" onclick="go('mk')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.5 12a8.5 8.5 0 1 1-2.6-6.1"/><path d="M20.5 4v5h-5"/></svg>보강<span class="badge-n" id="nbadge" style="display:none">0</span></button>
+  <button data-p="stat" onclick="go('stat')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>통계</button>
+</nav>
+
+<div class="mask" id="mask" onclick="if(event.target===this)close_()"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const K='classnote_v1';
+const DAYS=['일','월','화','수','목','금','토'];
+let D={groups:[],students:[],sessions:{},makeups:[],slots:['14:00','15:00','16:00','17:00','18:00','19:00','20:00']};
+let cur=new Date(), page='today', editG=null, editS=null;
+
+/* ---------- store ---------- */
+function load(){try{const r=localStorage.getItem(K);if(r)D=Object.assign(D,JSON.parse(r));}catch(e){}}
+function save(){localStorage.setItem(K,JSON.stringify(D));}
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parse=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);};
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1700);}
+function esc(s){return(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+const G=id=>D.groups.find(g=>g.id===id);
+const S=id=>D.students.find(s=>s.id===id);
+
+/* 세션 키: date|groupId  /  보강은 mk|id */
+function sesKey(date,gid){return date+'|'+gid;}
+function getSes(date,gid){return D.sessions[sesKey(date,gid)]||null;}
+function ensureSes(date,gid){const k=sesKey(date,gid);if(!D.sessions[k])D.sessions[k]={status:'ok',att:{},note:''};return D.sessions[k];}
+
+/* 해당 날짜에 이 그룹 수업이 있나 (정규 시간표) */
+function groupOnDate(g,date){return g.days.includes(parse(date).getDay());}
+/* 학생이 그 요일에 오는가 (개인 요일이 비었으면 그룹 전체 요일 따름) */
+function stuOnDate(st,g,date){const w=parse(date).getDay();
+  if(!st.days||!st.days.length)return g.days.includes(w);
+  return st.days.includes(w)&&g.days.includes(w);}
+
+/* ---------- nav ---------- */
+function go(p){page=p;
+  document.querySelectorAll('.page').forEach(e=>e.classList.remove('on'));
+  document.getElementById('p-'+p).classList.add('on');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
+  const H={today:['오늘 수업','출결을 체크하면 보강 대기와 통계에 자동 반영됩니다'],
+    grid:['주간 시간표','요일과 시간대로 소그룹을 배치합니다'],
+    stu:['학생 관리','수강권 잔여 횟수와 개인 수업 요일을 관리합니다'],
+    mk:['보강 대기','결석·휴강으로 밀린 수업을 잡아줍니다'],
+    stat:['월별 통계','출석률과 보강 소화 현황입니다']};
+  document.getElementById('ttl').textContent=H[p][0];
+  document.getElementById('tsub').textContent=H[p][1];
+  document.getElementById('fab').style.display=(p==='stu'||p==='mk')?'block':'none';
+  render();
+}
+function fabAct(){page==='stu'?stuModal():mkModal();}
+
+/* ---------- render ---------- */
+function render(){
+  const n=D.makeups.filter(m=>!m.done).length;
+  const b=document.getElementById('nbadge');
+  b.style.display=n?'block':'none'; b.textContent=n;
+  ({today:rToday,grid:rGrid,stu:rStu,mk:rMk,stat:rStat})[page]();
+  save();
+}
+
+/* --- 오늘 --- */
+function mvDay(n){cur.setDate(cur.getDate()+n);rToday();}
+function rToday(){
+  const ds=ymd(cur), w=cur.getDay();
+  const today=ymd(new Date());
+  document.getElementById('dlab').innerHTML=
+    `${cur.getMonth()+1}월 ${cur.getDate()}일 (${DAYS[w]})<small>${ds===today?'오늘':''}</small>`;
+
+  const gs=D.groups.filter(g=>groupOnDate(g,ds)).sort((a,b)=>a.time.localeCompare(b.time));
+  const mks=D.makeups.filter(m=>m.date===ds&&!m.done);
+  const box=document.getElementById('today-list');
+
+  if(!gs.length&&!mks.length){
+    box.innerHTML=`<div class="card empty"><b>이 날은 수업이 없습니다</b>시간표에서 그룹을 배치해 주세요</div>`;return;
+  }
+  let h='';
+  gs.forEach(g=>{
+    const s=getSes(ds,g.id)||{status:'ok',att:{},note:''};
+    const mem=D.students.filter(st=>st.gid===g.id&&stuOnDate(st,g,ds));
+    const off=s.status==='off';
+    h+=`<div class="card ses"><div class="ses-h">
+      <div style="flex:1"><div class="ses-t">${esc(g.name)}</div>
+      <div class="ses-time">${g.time} · ${mem.length}명</div></div>
+      <span class="chip ${off?'c-off':'c-ok'}">${off?'휴강':'정상'}</span>
+      <button class="btn b-s" style="padding:6px 10px;font-size:11.5px" onclick="offModal('${ds}','${g.id}')">${off?'해제':'휴강'}</button>
+    </div>`;
+    if(off){h+=`<div class="off-note">휴강 · ${esc(s.note||'사유 미기록')}<br><span style="color:var(--faint)">대상 ${mem.length}명이 보강 대기에 올라갔습니다</span></div>`;}
+    else if(!mem.length){h+=`<div class="off-note" style="background:#F7F9FB;color:var(--faint)">이 요일에 오는 학생이 없습니다</div>`;}
+    else mem.forEach(st=>{
+      const a=s.att[st.id]||'';
+      h+=`<div class="stu"><div class="stu-n">${esc(st.name)}${st.days&&st.days.length?`<small>주${st.days.length}회</small>`:''}</div>
+      <div class="att">
+        <button class="${a==='p'?'on-p':''}" onclick="setAtt('${ds}','${g.id}','${st.id}','p')">출석</button>
+        <button class="${a==='l'?'on-l':''}" onclick="setAtt('${ds}','${g.id}','${st.id}','l')">지각</button>
+        <button class="${a==='a'?'on-a':''}" onclick="setAtt('${ds}','${g.id}','${st.id}','a')">결석</button>
+      </div></div>`;});
+    h+=`</div>`;
+  });
+  mks.forEach(m=>{
+    const st=S(m.sid);if(!st)return;
+    h+=`<div class="card ses"><div class="ses-h">
+      <div style="flex:1"><div class="ses-t">${esc(st.name)} 보강</div>
+      <div class="ses-time">${m.time||'시간 미정'} · ${esc(m.reason||'')}</div></div>
+      <span class="chip c-mk">보강</span>
+      <button class="btn b-g" style="padding:6px 10px;font-size:11.5px" onclick="doneMk('${m.id}')">완료</button>
+    </div></div>`;
+  });
+  box.innerHTML=h;
+}
+function setAtt(ds,gid,sid,v){
+  const s=ensureSes(ds,gid);
+  const prev=s.att[sid];
+  s.att[sid]=(prev===v)?'':v;
+  const now=s.att[sid];
+  const st=S(sid);
+  // 수강권 차감: 출석/지각만 차감
+  if((prev==='p'||prev==='l')&&!(now==='p'||now==='l'))st.left=(st.left||0)+1;
+  if(!(prev==='p'||prev==='l')&&(now==='p'||now==='l'))st.left=(st.left||0)-1;
+  // 보강 대기 연동
+  const mid='a_'+ds+'_'+sid;
+  if(now==='a'&&!D.makeups.some(m=>m.id===mid))
+    D.makeups.push({id:mid,sid,date:'',time:'',reason:`${ds} 결석`,from:ds,done:false});
+  if(now!=='a'){const i=D.makeups.findIndex(m=>m.id===mid&&!m.done);if(i>-1)D.makeups.splice(i,1);}
+  render();
+}
+
+/* --- 휴강 --- */
+function offModal(ds,gid){
+  const s=getSes(ds,gid)||{status:'ok',note:''};
+  if(s.status==='off'){ // 해제
+    s.status='ok';
+    D.makeups=D.makeups.filter(m=>!(m.from===ds&&m.gid===gid&&!m.done));
+    render();toast('휴강을 해제했습니다');return;
+  }
+  const g=G(gid);
+  open_(`<div class="m-t">휴강 처리</div><div class="m-s">${esc(g.name)} · ${ds}</div>
+  <label>사유</label>
+  <div class="tpl">${['강사 사정','공휴일','시설 점검','기상 악화','기타'].map(t=>`<button onclick="document.getElementById('offr').value='${t}'">${t}</button>`).join('')}</div>
+  <input id="offr" placeholder="예: 강사 개인 사정">
+  <label>대상 학생 보강 대기 등록</label>
+  <select id="offq"><option value="1">등록함 (권장)</option><option value="0">등록 안 함</option></select>
+  <div class="row" style="margin-top:16px">
+    <button class="btn b-s" onclick="close_()">취소</button>
+    <button class="btn b-p" onclick="saveOff('${ds}','${gid}')">휴강 처리</button></div>`);
+}
+function saveOff(ds,gid){
+  const s=ensureSes(ds,gid);
+  s.status='off'; s.note=document.getElementById('offr').value.trim()||'사유 미기록';
+  if(document.getElementById('offq').value==='1'){
+    const g=G(gid);
+    D.students.filter(st=>st.gid===gid&&stuOnDate(st,g,ds)).forEach(st=>{
+      const id='o_'+ds+'_'+st.id;
+      if(!D.makeups.some(m=>m.id===id))
+        D.makeups.push({id,sid:st.id,gid,date:'',time:'',reason:`${ds} 휴강 (${s.note})`,from:ds,done:false});
+    });
+  }
+  close_();render();toast('휴강 처리했습니다');
+}
+
+/* --- 시간표 --- */
+function rGrid(){
+  const cols=[1,2,3,4,5,6,0];
+  let h='<tr><th></th>'+cols.map(c=>`<th>${DAYS[c]}</th>`).join('')+'</tr>';
+  D.slots.forEach(t=>{
+    h+=`<tr><td class="tcol">${t}</td>`;
+    cols.forEach(c=>{
+      const g=D.groups.find(x=>x.time===t&&x.days.includes(c));
+      h+=`<td>${g?`<div class="gcell" onclick="gModal('${g.id}')">${esc(g.name)}<small>${D.students.filter(s=>s.gid===g.id).length}명</small></div>`
+        :`<button class="gadd" onclick="gModal(null,'${t}',${c})">+</button>`}</td>`;
+    });
+    h+='</tr>';
+  });
+  document.getElementById('gridtb').innerHTML=h;
+}
+function gModal(id,t,d){
+  editG=id?G(id):null;
+  const g=editG||{name:'',time:t||'16:00',days:d!==undefined?[d]:[],memo:''};
+  open_(`<div class="m-t">${editG?'그룹 수정':'그룹 추가'}</div>
+  <div class="m-s">같은 요일·시간에 모이는 소그룹 하나입니다</div>
+  <label>그룹 이름</label><input id="gn" value="${esc(g.name)}" placeholder="예: 초등 A반">
+  <label>시간</label>
+  <select id="gt">${D.slots.map(s=>`<option ${s===g.time?'selected':''}>${s}</option>`).join('')}</select>
+  <label>수업 요일 (복수 선택)</label>
+  <div class="days" id="gd">${[1,2,3,4,5,6,0].map(i=>`<button data-d="${i}" class="${g.days.includes(i)?'on':''}" onclick="this.classList.toggle('on')">${DAYS[i]}</button>`).join('')}</div>
+  <label>메모</label><input id="gm" value="${esc(g.memo||'')}" placeholder="교재·진도 등">
+  <div class="row" style="margin-top:16px">
+    ${editG?`<button class="btn b-d" onclick="delG()">삭제</button>`:''}
+    <button class="btn b-s" onclick="close_()">취소</button>
+    <button class="btn b-p" onclick="saveG()">저장</button></div>`);
+}
+function saveG(){
+  const n=document.getElementById('gn').value.trim();
+  if(!n)return toast('그룹 이름을 입력해 주세요');
+  const days=[...document.querySelectorAll('#gd button.on')].map(b=>+b.dataset.d);
+  if(!days.length)return toast('수업 요일을 선택해 주세요');
+  const o={name:n,time:document.getElementById('gt').value,days,memo:document.getElementById('gm').value.trim()};
+  if(editG)Object.assign(editG,o); else D.groups.push({id:uid(),...o});
+  close_();render();toast('저장했습니다');
+}
+function delG(){
+  if(!confirm('그룹을 삭제하면 소속 학생의 그룹 지정이 해제됩니다. 삭제할까요?'))return;
+  D.students.forEach(s=>{if(s.gid===editG.id)s.gid='';});
+  D.groups=D.groups.filter(g=>g.id!==editG.id);
+  close_();render();toast('삭제했습니다');
+}
+
+/* --- 학생 --- */
+function rStu(){
+  const q=(document.getElementById('q').value||'').trim().toLowerCase();
+  let list=D.students.slice().sort((a,b)=>a.name.localeCompare(b.name,'ko'));
+  if(q)list=list.filter(s=>s.name.toLowerCase().includes(q)||(G(s.gid)?.name||'').toLowerCase().includes(q));
+  const box=document.getElementById('stu-list');
+  if(!list.length){box.innerHTML=`<div class="card empty"><b>${q?'검색 결과가 없습니다':'등록된 학생이 없습니다'}</b>${q?'다른 이름으로 찾아보세요':'오른쪽 아래 + 로 추가하세요'}</div>`;return;}
+  box.innerHTML=list.map(s=>{
+    const g=G(s.gid);
+    const dl=s.days&&s.days.length?s.days.map(d=>DAYS[d]).join('·'):(g?g.days.map(d=>DAYS[d]).join('·'):'-');
+    return `<div class="card stu-c" onclick="stuModal('${s.id}')">
+      <div class="av">${esc(s.name.slice(-2))}</div>
+      <div class="stu-i"><div class="n">${esc(s.name)}</div>
+      <div class="m">${g?esc(g.name)+' · '+g.time:'그룹 없음'} · ${dl}</div></div>
+      <div class="tick ${(s.left||0)<=2?'low':''}"><b>${s.left||0}</b><span>남은 횟수</span></div></div>`;
+  }).join('');
+}
+function stuModal(id){
+  editS=id?S(id):null;
+  const s=editS||{name:'',gid:'',days:[],left:0,phone:'',memo:''};
+  const g=G(s.gid);
+  open_(`<div class="m-t">${editS?'학생 정보':'학생 추가'}</div>
+  <div class="m-s">개인 요일을 비워두면 그룹 요일을 그대로 따릅니다</div>
+  <label>이름</label><input id="sn" value="${esc(s.name)}">
+  <label>소속 그룹</label>
+  <select id="sg"><option value="">그룹 없음</option>
+  ${D.groups.map(x=>`<option value="${x.id}" ${x.id===s.gid?'selected':''}>${esc(x.name)} (${x.time} · ${x.days.map(d=>DAYS[d]).join('')})</option>`).join('')}</select>
+  <label>개인 수업 요일 (그룹과 다를 때만)</label>
+  <div class="days" id="sd">${[1,2,3,4,5,6,0].map(i=>`<button data-d="${i}" class="${(s.days||[]).includes(i)?'on':''}" onclick="this.classList.toggle('on')">${DAYS[i]}</button>`).join('')}</div>
+  <label>남은 수강 횟수</label><input id="sl" type="number" value="${s.left||0}">
+  <label>학부모 연락처</label><input id="sp" value="${esc(s.phone||'')}" placeholder="010-0000-0000">
+  <label>메모</label><input id="sm" value="${esc(s.memo||'')}">
+  ${editS?`<button class="btn b-b" style="width:100%;margin-top:14px" onclick="msgModal('${s.id}')">학부모 안내 문구 만들기</button>`:''}
+  <div class="row" style="margin-top:10px">
+    ${editS?`<button class="btn b-d" onclick="delS()">삭제</button>`:''}
+    <button class="btn b-s" onclick="close_()">취소</button>
+    <button class="btn b-p" onclick="saveS()">저장</button></div>`);
+}
+function saveS(){
+  const n=document.getElementById('sn').value.trim();
+  if(!n)return toast('이름을 입력해 주세요');
+  const o={name:n,gid:document.getElementById('sg').value,
+    days:[...document.querySelectorAll('#sd button.on')].map(b=>+b.dataset.d),
+    left:+document.getElementById('sl').value||0,
+    phone:document.getElementById('sp').value.trim(),
+    memo:document.getElementById('sm').value.trim()};
+  if(editS)Object.assign(editS,o); else D.students.push({id:uid(),...o});
+  close_();render();toast('저장했습니다');
+}
+function delS(){
+  if(!confirm(`${editS.name} 학생을 삭제할까요? 출결 기록도 함께 사라집니다.`))return;
+  D.makeups=D.makeups.filter(m=>m.sid!==editS.id);
+  D.students=D.students.filter(s=>s.id!==editS.id);
+  close_();render();toast('삭제했습니다');
+}
+
+/* --- 보강 --- */
+function rMk(){
+  const list=D.makeups.filter(m=>!m.done).sort((a,b)=>(a.date||'9').localeCompare(b.date||'9'));
+  const done=D.makeups.filter(m=>m.done);
+  const box=document.getElementById('mk-list');
+  if(!list.length&&!done.length){box.innerHTML=`<div class="card empty"><b>보강 대기가 없습니다</b>결석이나 휴강을 기록하면 여기에 쌓입니다</div>`;return;}
+  let h='';
+  if(list.length){
+    h+='<p class="sec-t">대기 '+list.length+'건</p>';
+    h+=list.map(m=>{
+      const s=S(m.sid);if(!s)return'';
+      return `<div class="card mk-c"><div class="mk-h">
+        <div class="n">${esc(s.name)}</div>
+        <span class="chip ${m.date?'c-mk':'c-off'}">${m.date?'일정 확정':'미배정'}</span></div>
+        <div class="mk-m">${esc(m.reason||'')}${m.date?`<br><b style="color:var(--navy)">${m.date} ${m.time||''}</b>`:''}</div>
+        <div class="mk-b">
+          <button class="btn b-s" onclick="mkModal('${m.id}')">${m.date?'일정 변경':'일정 잡기'}</button>
+          <button class="btn b-b" onclick="msgModal('${m.sid}','${m.id}')">안내 문구</button>
+          <button class="btn b-g" onclick="doneMk('${m.id}')">완료</button>
+        </div></div>`;}).join('');
+  }
+  if(done.length){
+    h+='<p class="sec-t">완료 '+done.length+'건</p>';
+    h+=done.slice(-8).reverse().map(m=>{const s=S(m.sid);if(!s)return'';
+      return `<div class="card mk-c" style="opacity:.55"><div class="mk-h"><div class="n">${esc(s.name)}</div>
+      <span class="chip c-ok">완료</span></div><div class="mk-m">${esc(m.reason||'')} → ${m.date||'-'}</div></div>`;}).join('');
+  }
+  box.innerHTML=h;
+}
+function mkModal(id){
+  const m=id?D.makeups.find(x=>x.id===id):null;
+  const o=m||{sid:'',date:ymd(new Date()),time:'16:00',reason:''};
+  open_(`<div class="m-t">${m?'보강 일정':'보강 추가'}</div>
+  <div class="m-s">비어 있는 시간대에 보강을 배치합니다</div>
+  <label>학생</label>
+  <select id="mS" ${m?'disabled':''}><option value="">선택</option>
+  ${D.students.map(s=>`<option value="${s.id}" ${s.id===o.sid?'selected':''}>${esc(s.name)}</option>`).join('')}</select>
+  <label>날짜</label><input id="mD" type="date" value="${o.date||ymd(new Date())}">
+  <label>시간</label><select id="mT">${D.slots.map(s=>`<option ${s===o.time?'selected':''}>${s}</option>`).join('')}</select>
+  <label>사유</label><input id="mR" value="${esc(o.reason||'')}" placeholder="예: 개인 사정 결석">
+  <div class="row" style="margin-top:16px">
+    ${m?`<button class="btn b-d" onclick="delMk('${m.id}')">삭제</button>`:''}
+    <button class="btn b-s" onclick="close_()">취소</button>
+    <button class="btn b-p" onclick="saveMk('${m?m.id:''}')">저장</button></div>`);
+}
+function saveMk(id){
+  const sid=document.getElementById('mS').value;
+  const o={date:document.getElementById('mD').value,time:document.getElementById('mT').value,reason:document.getElementById('mR').value.trim()};
+  if(id){Object.assign(D.makeups.find(x=>x.id===id),o);}
+  else{if(!sid)return toast('학생을 선택해 주세요');D.makeups.push({id:uid(),sid,done:false,...o});}
+  close_();render();toast('저장했습니다');
+}
+function delMk(id){D.makeups=D.makeups.filter(m=>m.id!==id);close_();render();toast('삭제했습니다');}
+function doneMk(id){const m=D.makeups.find(x=>x.id===id);m.done=true;if(!m.date)m.date=ymd(new Date());render();toast('보강 완료');}
+
+/* --- 안내 문구 --- */
+function msgModal(sid,mid){
+  const s=S(sid);const g=G(s.gid);const m=mid?D.makeups.find(x=>x.id===mid):null;
+  const T={
+    보강안내:m&&m.date?`안녕하세요, ${s.name} 학생 학부모님.\n\n${m.reason||'수업 결석'} 건에 대한 보강 일정을 안내드립니다.\n\n· 일시: ${m.date} ${m.time||''}\n· 반: ${g?g.name:'-'}\n\n일정 조율이 필요하시면 편하게 말씀해 주세요.\n감사합니다.`
+      :`안녕하세요, ${s.name} 학생 학부모님.\n\n${m?m.reason:'결석'} 건에 대한 보강 일정을 잡으려 합니다.\n가능하신 요일과 시간을 알려주시면 맞춰 배정하겠습니다.\n\n감사합니다.`,
+    휴강안내:`안녕하세요, ${s.name} 학생 학부모님.\n\n부득이한 사정으로 ${g?g.name:''} 수업이 휴강됩니다.\n해당 회차는 보강으로 채워드리며, 일정은 별도로 안내드리겠습니다.\n\n양해 부탁드립니다.`,
+    잔여횟수:`안녕하세요, ${s.name} 학생 학부모님.\n\n현재 남은 수업 횟수는 ${s.left||0}회입니다.\n${(s.left||0)<=2?'곧 소진될 예정이라 재등록 안내드립니다.':'참고 부탁드립니다.'}\n\n감사합니다.`,
+    결석확인:`안녕하세요, ${s.name} 학생 학부모님.\n\n오늘 ${g?g.name:''} 수업에 결석하여 확인차 연락드립니다.\n보강이 필요하시면 알려주세요.\n\n감사합니다.`
+  };
+  const ks=Object.keys(T);
+  open_(`<div class="m-t">학부모 안내 문구</div>
+  <div class="m-s">${esc(s.name)} 학생 · ${s.phone||'연락처 미등록'}</div>
+  <div class="tpl" id="tp">${ks.map((k,i)=>`<button class="${i===0?'on':''}" onclick="pickT('${k}')">${k}</button>`).join('')}</div>
+  <div class="msg" id="mv">${esc(T[ks[0]])}</div>
+  <input type="hidden" id="mstore" value="${encodeURIComponent(JSON.stringify(T))}">
+  <div class="row" style="margin-top:14px">
+    <button class="btn b-s" onclick="close_()">닫기</button>
+    <button class="btn b-p" onclick="copyMsg()">복사하기</button></div>`);
+}
+function pickT(k){
+  const T=JSON.parse(decodeURIComponent(document.getElementById('mstore').value));
+  document.getElementById('mv').textContent=T[k];
+  document.querySelectorAll('#tp button').forEach(b=>b.classList.toggle('on',b.textContent===k));
+}
+function copyMsg(){
+  const t=document.getElementById('mv').textContent;
+  navigator.clipboard.writeText(t).then(()=>toast('복사했습니다'))
+    .catch(()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();toast('복사했습니다');});
+}
+
+/* --- 통계 --- */
+function rStat(){
+  const now=new Date(), mp=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  let p=0,l=0,a=0,offN=0;
+  Object.entries(D.sessions).forEach(([k,s])=>{
+    if(!k.startsWith(mp))return;
+    if(s.status==='off'){offN++;return;}
+    Object.values(s.att).forEach(v=>{if(v==='p')p++;else if(v==='l')l++;else if(v==='a')a++;});
+  });
+  const tot=p+l+a;
+  const rate=tot?Math.round((p+l)/tot*100):0;
+  const mkAll=D.makeups.length, mkDone=D.makeups.filter(m=>m.done).length;
+  const mkRate=mkAll?Math.round(mkDone/mkAll*100):0;
+
+  // 그룹별 출석률
+  const gstat={};
+  Object.entries(D.sessions).forEach(([k,s])=>{
+    if(!k.startsWith(mp)||s.status==='off')return;
+    const gid=k.split('|')[1];
+    gstat[gid]=gstat[gid]||{p:0,t:0};
+    Object.values(s.att).forEach(v=>{if(!v)return;gstat[gid].t++;if(v!=='a')gstat[gid].p++;});
+  });
+  const rows=Object.entries(gstat).filter(([,v])=>v.t).map(([gid,v])=>({n:G(gid)?.name||'삭제된 그룹',r:Math.round(v.p/v.t*100)})).sort((x,y)=>y.r-x.r);
+
+  document.getElementById('stat-body').innerHTML=`
+  <p class="sec-t">${now.getMonth()+1}월 현황</p>
+  <div class="kpi">
+    <div class="card"><b>${rate}%</b><span>출석률</span></div>
+    <div class="card"><b>${a}</b><span>결석</span></div>
+    <div class="card"><b>${offN}</b><span>휴강</span></div>
+  </div>
+  <div class="kpi">
+    <div class="card"><b>${D.students.length}</b><span>전체 학생</span></div>
+    <div class="card"><b>${D.groups.length}</b><span>그룹</span></div>
+    <div class="card"><b>${mkRate}%</b><span>보강 소화율</span></div>
+  </div>
+  <p class="sec-t">그룹별 출석률</p>
+  <div class="card" style="padding:6px 15px 12px">
+  ${rows.length?rows.map(r=>`<div class="brow"><div class="bn">${esc(r.n)}</div>
+    <div class="btrack"><div class="bfill" style="width:${r.r}%;background:${r.r<80?'var(--amber)':'var(--green)'}"></div></div>
+    <div class="bv">${r.r}%</div></div>`).join('')
+    :`<div class="empty" style="padding:28px 0"><b>아직 기록이 없습니다</b>출결을 체크하면 집계됩니다</div>`}
+  </div>
+  <p class="sec-t">잔여 횟수 임박 (2회 이하)</p>
+  <div class="card" style="padding:6px 15px 12px">
+  ${(()=>{const ls=D.students.filter(s=>(s.left||0)<=2).sort((a,b)=>(a.left||0)-(b.left||0));
+    return ls.length?ls.map(s=>`<div class="brow"><div class="bn" style="width:auto;flex:1">${esc(s.name)}</div>
+      <div class="bv" style="color:${(s.left||0)<=0?'#C96A6A':'var(--sub)'}">${s.left||0}회</div></div>`).join('')
+      :`<div class="empty" style="padding:28px 0"><b>임박한 학생이 없습니다</b>모두 여유가 있습니다</div>`;})()}
+  </div>
+  <p class="sec-t">데이터</p>
+  <div class="row" style="margin-bottom:8px">
+    <button class="btn b-s" onclick="expJ()">백업 내보내기</button>
+    <button class="btn b-s" onclick="document.getElementById('imp').click()">불러오기</button>
+  </div>
+  <input type="file" id="imp" accept=".json" style="display:none" onchange="impJ(this)">
+  <button class="btn b-s" style="width:100%" onclick="seed()">예시 데이터 넣기</button>`;
+}
+function expJ(){
+  const b=new Blob([JSON.stringify(D,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);
+  a.download=`클래스노트_${ymd(new Date())}.json`;a.click();toast('백업 파일을 내려받았습니다');
+}
+function impJ(el){
+  const f=el.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{try{D=JSON.parse(e.target.result);save();render();toast('불러왔습니다');}catch(x){toast('파일을 읽을 수 없습니다');}};
+  r.readAsText(f);el.value='';
+}
+function seed(){
+  if(D.students.length&&!confirm('기존 데이터에 예시가 추가됩니다. 계속할까요?'))return;
+  const gs=[{name:'초등 A반',time:'15:00',days:[1,3,5]},{name:'초등 B반',time:'16:00',days:[2,4]},
+    {name:'중등 심화',time:'18:00',days:[1,4]},{name:'주말 특강',time:'14:00',days:[6]}];
+  gs.forEach(g=>D.groups.push({id:uid(),memo:'',...g}));
+  const ns=['김서연','이도윤','박하준','최지우','정예린','강민준','조수아','윤지호','임채원','한서준'];
+  ns.forEach((n,i)=>D.students.push({id:uid(),name:n,gid:D.groups[i%4].id,
+    days:i%3===0?[D.groups[i%4].days[0]]:[],left:[12,8,4,2,1][i%5],phone:'',memo:''}));
+  save();render();toast('예시 데이터를 넣었습니다');
+}
+
+/* --- modal --- */
+function open_(h){document.getElementById('modal').innerHTML=h;document.getElementById('mask').classList.add('on');}
+function close_(){document.getElementById('mask').classList.remove('on');editG=editS=null;}
+
+load();go('today');
+</script>
+</body>
+</html>
