@@ -44,6 +44,35 @@ nav button{flex:1;background:none;border:none;padding:11px 0 12px;font-family:in
 nav button.on{color:var(--navy);} nav svg{width:21px;height:21px;stroke-width:1.8;}
 .badge-n{position:absolute;top:6px;margin-left:26px;background:var(--rose);color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:8px;}
 
+/* month */
+.mnav{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.mnav button{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:#fff;font-size:15px;cursor:pointer;color:var(--sub);}
+.mnav .mlabel{flex:1;text-align:center;font-size:16px;font-weight:800;color:var(--navy);}
+.mnav .mtoday{width:auto;padding:0 12px;font-size:12px;font-weight:700;color:var(--sub);}
+.cal{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);}
+.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);background:#F7F9FB;border-bottom:1px solid var(--line);}
+.cal-dow div{text-align:center;font-size:11px;font-weight:700;color:var(--sub);padding:8px 0;}
+.cal-dow div:first-child{color:#D08A8A;} .cal-dow div:last-child{color:#7FA8D0;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));}
+.cell{min-height:74px;border-right:1px solid #F0F3F6;border-bottom:1px solid #F0F3F6;padding:5px 4px 4px;cursor:pointer;position:relative;transition:.12s;}
+.cell:nth-child(7n){border-right:none;}
+.cell.pad{background:#FCFDFE;cursor:default;}
+.cell.sel{background:#EFF7FC;box-shadow:inset 0 0 0 2px var(--blue);}
+.cell .dnum{font-size:12px;font-weight:700;color:var(--text);}
+.cell.sun .dnum{color:#D08A8A;} .cell.sat .dnum{color:#7FA8D0;}
+.cell.today .dnum{background:var(--navy);color:#fff;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;}
+.cchip{font-size:9.5px;font-weight:700;line-height:1.3;border-radius:4px;padding:1px 4px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cchip.ok{background:#EFF7FC;color:#4E7B9C;} .cchip.off{background:#FDF0F0;color:#C96A6A;}
+.cchip.mk{background:#FBF4E6;color:#A9862F;}
+.cmore{font-size:9px;color:var(--faint);font-weight:700;margin-top:2px;padding-left:2px;}
+.cdot{position:absolute;bottom:4px;right:5px;display:flex;gap:2px;}
+.cdot i{width:5px;height:5px;border-radius:50%;}
+.mday{margin-top:16px;}
+.mday-h{display:flex;align-items:baseline;gap:8px;margin-bottom:10px;}
+.mday-h b{font-size:16px;font-weight:800;color:var(--navy);}
+.mday-h span{font-size:12px;color:var(--sub);font-weight:600;}
+@media(max-width:520px){.cell{min-height:62px;}.cchip{font-size:9px;}}
+
 /* today */
 .datenav{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .datenav button{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:#fff;font-size:15px;cursor:pointer;color:var(--sub);}
@@ -140,8 +169,23 @@ table.grid{border-collapse:collapse;width:100%;min-width:640px;background:#fff;b
     <div class="bar"></div>
   </header>
 
+  <!-- 월간 -->
+  <section class="page on" id="p-month">
+    <div class="mnav">
+      <button onclick="mvMonth(-1)">‹</button>
+      <div class="mlabel" id="mlab"></div>
+      <button onclick="mvMonth(1)">›</button>
+      <button class="mtoday" onclick="goToday()">오늘</button>
+    </div>
+    <div class="cal">
+      <div class="cal-dow"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div>
+      <div class="cal-grid" id="calgrid"></div>
+    </div>
+    <div class="mday" id="mday"></div>
+  </section>
+
   <!-- 오늘 -->
-  <section class="page on" id="p-today">
+  <section class="page" id="p-today">
     <div class="datenav">
       <button onclick="mvDay(-1)">‹</button>
       <div class="dlabel" id="dlab"></div>
@@ -176,8 +220,10 @@ table.grid{border-collapse:collapse;width:100%;min-width:640px;background:#fff;b
 <button class="fab" id="fab" onclick="fabAct()">＋</button>
 
 <nav>
-  <button class="on" data-p="today" onclick="go('today')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>오늘</button>
+  <button class="on" data-p="month" onclick="go('month')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18M7 14h2M11 14h2M15 14h2M7 17h2M11 17h2"/></svg>월간</button>
+  <button data-p="today" onclick="go('today')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l2.5 2.5L16 8"/><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4"/></svg>오늘</button>
   <button data-p="grid" onclick="go('grid')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M9 9v12M15 9v12"/></svg>시간표</button>
   <button data-p="stu" onclick="go('stu')">
@@ -225,7 +271,8 @@ function go(p){page=p;
   document.querySelectorAll('.page').forEach(e=>e.classList.remove('on'));
   document.getElementById('p-'+p).classList.add('on');
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
-  const H={today:['오늘 수업','출결을 체크하면 보강 대기와 통계에 자동 반영됩니다'],
+  const H={month:['월간 시간표','날짜를 누르면 그날 수업과 출결이 아래에 열립니다'],
+    today:['오늘 수업','출결을 체크하면 보강 대기와 통계에 자동 반영됩니다'],
     grid:['주간 시간표','요일과 시간대로 소그룹을 배치합니다'],
     stu:['학생 관리','수강권 잔여 횟수와 개인 수업 요일을 관리합니다'],
     mk:['보강 대기','결석·휴강으로 밀린 수업을 잡아줍니다'],
@@ -242,8 +289,73 @@ function render(){
   const n=D.makeups.filter(m=>!m.done).length;
   const b=document.getElementById('nbadge');
   b.style.display=n?'block':'none'; b.textContent=n;
-  ({today:rToday,grid:rGrid,stu:rStu,mk:rMk,stat:rStat})[page]();
+  ({month:rMonth,today:rToday,grid:rGrid,stu:rStu,mk:rMk,stat:rStat})[page]();
   save();
+}
+
+/* --- 월간 --- */
+let mView=new Date();     // 표시 중인 달
+let mSel=ymd(new Date()); // 선택 날짜
+
+function mvMonth(n){mView.setDate(1);mView.setMonth(mView.getMonth()+n);rMonth();}
+function goToday(){mView=new Date();mSel=ymd(new Date());cur=new Date();rMonth();}
+
+/* 그 날짜의 이벤트 요약 [{label,type}] */
+function dayEvents(ds){
+  const w=parse(ds).getDay(), out=[];
+  D.groups.filter(g=>g.days.includes(w)).sort((a,b)=>a.time.localeCompare(b.time)).forEach(g=>{
+    const s=getSes(ds,g.id);
+    out.push({label:`${g.time.slice(0,5)} ${g.name}`,type:s&&s.status==='off'?'off':'ok'});
+  });
+  D.makeups.filter(m=>m.date===ds&&!m.done).forEach(m=>{
+    const st=S(m.sid);out.push({label:`보강 ${st?st.name:''}`,type:'mk'});
+  });
+  return out;
+}
+
+function rMonth(){
+  const y=mView.getFullYear(), mo=mView.getMonth();
+  document.getElementById('mlab').textContent=`${y}년 ${mo+1}월`;
+  const first=new Date(y,mo,1), start=first.getDay();
+  const dim=new Date(y,mo+1,0).getDate();
+  const prevDim=new Date(y,mo,0).getDate();
+  const today=ymd(new Date());
+  let h='';
+  // 앞 패딩
+  for(let i=start-1;i>=0;i--)h+=`<div class="cell pad"><div class="dnum" style="color:#D5DCE3">${prevDim-i}</div></div>`;
+  // 본 날짜
+  for(let d=1;d<=dim;d++){
+    const ds=`${y}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const w=new Date(y,mo,d).getDay();
+    const ev=dayEvents(ds);
+    let cls='cell';
+    if(w===0)cls+=' sun'; if(w===6)cls+=' sat';
+    if(ds===today)cls+=' today'; if(ds===mSel)cls+=' sel';
+    let chips='';
+    ev.slice(0,2).forEach(e=>chips+=`<div class="cchip ${e.type}">${esc(e.label)}</div>`);
+    if(ev.length>2)chips+=`<div class="cmore">+${ev.length-2}</div>`;
+    h+=`<div class="${cls}" onclick="selDay('${ds}')"><div class="dnum">${d}</div>${chips}</div>`;
+  }
+  // 뒤 패딩 (한 줄 채우기)
+  const filled=start+dim, tail=(7-filled%7)%7;
+  for(let i=1;i<=tail;i++)h+=`<div class="cell pad"><div class="dnum" style="color:#D5DCE3">${i}</div></div>`;
+  document.getElementById('calgrid').innerHTML=h;
+  rMDay();
+}
+
+/* 선택 날짜 상세 — 오늘 탭과 동일한 출결 UI 재사용 */
+function selDay(ds){mSel=ds;cur=parse(ds);
+  document.querySelectorAll('#calgrid .cell').forEach(c=>c.classList.remove('sel'));
+  event.currentTarget.classList.add('sel');rMDay();
+  document.getElementById('mday').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function rMDay(){
+  const box=document.getElementById('mday');
+  const d=parse(mSel);
+  box.innerHTML=`<div class="mday-h"><b>${d.getMonth()+1}월 ${d.getDate()}일</b><span>(${DAYS[d.getDay()]})${mSel===ymd(new Date())?' · 오늘':''}</span></div>`
+    +`<div id="mday-list"></div>`;
+  cur=parse(mSel);
+  renderDayInto('mday-list',mSel);
 }
 
 /* --- 오늘 --- */
@@ -253,11 +365,14 @@ function rToday(){
   const today=ymd(new Date());
   document.getElementById('dlab').innerHTML=
     `${cur.getMonth()+1}월 ${cur.getDate()}일 (${DAYS[w]})<small>${ds===today?'오늘':''}</small>`;
+  renderDayInto('today-list',ds);
+}
 
+/* 특정 날짜의 세션 목록을 지정 요소에 그림 (오늘 탭·월간 탭 공용) */
+function renderDayInto(elId,ds){
+  const box=document.getElementById(elId);if(!box)return;
   const gs=D.groups.filter(g=>groupOnDate(g,ds)).sort((a,b)=>a.time.localeCompare(b.time));
   const mks=D.makeups.filter(m=>m.date===ds&&!m.done);
-  const box=document.getElementById('today-list');
-
   if(!gs.length&&!mks.length){
     box.innerHTML=`<div class="card empty"><b>이 날은 수업이 없습니다</b>시간표에서 그룹을 배치해 주세요</div>`;return;
   }
@@ -618,7 +733,7 @@ function seed(){
 function open_(h){document.getElementById('modal').innerHTML=h;document.getElementById('mask').classList.add('on');}
 function close_(){document.getElementById('mask').classList.remove('on');editG=editS=null;}
 
-load();go('today');
+load();go('month');
 </script>
 </body>
 </html>
